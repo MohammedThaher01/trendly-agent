@@ -1,6 +1,28 @@
 # Solution Note: Trendly Agentic Support Assistant
 
 ## Architecture & Approach
+
+# Solution Note: Trendly Agentic Support Assistant
+
+## Architecture & Approach
+
+The solution utilizes a hybrid ReAct architecture to eliminate LLM hallucinations on business policies and date math. 
+
+```mermaid
+graph TD
+    User[👤 Customer / UI] -->|Sends Chat Message| API[⚡ FastAPI Service]
+    API --> InputGuard[🛡️ Input Guardrail<br>PII Scrubbing]
+    InputGuard --> State[(🧠 In-Memory<br>Session State)]
+    State --> Orchestrator{🤖 LLM Orchestrator<br>Groq / Llama 3}
+    
+    Orchestrator <-->|Function Calling| Tools[⚙️ Deterministic Rules Engine<br>Python Tools]
+    Tools -.->|Reads| Data[(📦 orders.json)]
+    Tools -.->|Fires| CRM[🎫 CRM Dispatcher<br>Terminal Hook]
+    
+    Orchestrator -->|Generates Draft| OutputGuard[🛡️ Output Guardrail<br>Section 7 Check]
+    OutputGuard -->|Safe Response| User
+
+
 The solution utilizes a hybrid ReAct architecture to eliminate LLM hallucinations on business policies and date math:
 
 1. **Conversational Orchestrator:** The LLM acts purely as a cognitive router, managing natural language understanding, empathetic engagement, and multi-turn state tracking.
