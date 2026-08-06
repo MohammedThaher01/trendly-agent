@@ -9,10 +9,26 @@ CURRENT_EVAL_DATE = datetime(2026, 8, 4, 10, 0, 0, tzinfo=timezone.utc)
 NON_RETURNABLE_CATEGORIES = {"innerwear", "socks", "jewellery", "beauty", "fragrance", "face_masks", "gift_cards"}
 
 def _normalize_id(order_id: str) -> str:
-    """Strips spaces, dashes, and standardizes case for dirty input IDs."""
+    """Normalizes order IDs handling formats like '4524', 'tr 4524', 'order 4524', 'TR-4524'."""
     if not order_id:
         return ""
-    return re.sub(r'[^a-zA-Z0-9]', '', str(order_id)).upper()
+    
+    # Clean string: uppercase and remove spaces/dashes
+    cleaned = re.sub(r'[^a-zA-Z0-9]', '', str(order_id)).upper()
+    
+    # Strip common leading words like "ORDER"
+    if cleaned.startswith("ORDER") and len(cleaned) > 5:
+        cleaned = cleaned[5:]
+        
+    # If the user only gave digits (e.g., '4524'), prepend 'TR'
+    if cleaned.isdigit():
+        cleaned = f"TR{cleaned}"
+        
+    # If it starts with TR (e.g., 'TR4524'), format as 'TR-4524' for uniform lookup
+    if cleaned.startswith("TR") and len(cleaned) > 2:
+        return f"TR-{cleaned[2:]}"
+        
+    return cleaned
 
 def load_orders_data() -> Dict[str, Any]:
     file_path = os.path.join(os.path.dirname(__file__), "..", "data", "orders.json")
@@ -140,11 +156,16 @@ def check_delay_credit_eligibility(order_id: str) -> str:
 
 def escalate_to_human(order_id: str, reason: str, conversation_summary: str) -> str:
     safe_id = _normalize_id(order_id) if order_id else "GENERAL"
-    return json.dumps({
+    ticket_payload = {
         "status": "escalated",
         "ticket_id": f"TICK-{safe_id}-HUMAN",
         "order_id": order_id,
         "escalation_reason": reason,
         "summary_for_agent": conversation_summary,
         "human_support_hours": "9:00 AM – 9:00 PM IST, 7 days a week"
-    })
+    }
+    
+    # Simulates outbound CRM Webhook to terminal
+    print(f"\n[CRM DISPATCH SUCCESS] Created Ticket: {ticket_payload['ticket_id']} | Reason: {reason}\n")
+    
+    return json.dumps(ticket_payload)

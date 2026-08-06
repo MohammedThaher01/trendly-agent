@@ -1,8 +1,9 @@
 import json
 import os
+import re
 from typing import List, Dict, Any
 from dotenv import load_dotenv
-from groq import Groq  
+from groq import Groq
 from agent.prompts import SYSTEM_PROMPT
 from agent.guardrails import sanitize_and_validate_output
 from agent.tools import (
@@ -22,6 +23,15 @@ if not api_key:
     raise ValueError("GROQ_API_KEY is missing. Please check your .env file.")
 
 client = Groq(api_key=api_key)
+
+# --- SYSTEM OBSERVABILITY STORE ---
+SYSTEM_METRICS = {
+    "total_requests": 0,
+    "total_prompt_tokens": 0,
+    "total_completion_tokens": 0,
+    "total_tokens": 0,
+    "escalations_count": 0
+}
 
 # Tool declarations schema
 TOOLS_SCHEMA = [
@@ -98,6 +108,18 @@ TOOLS_SCHEMA = [
 # Session state dictionary: {session_id: [messages]}
 SESSION_STORE: Dict[str, List[Dict[str, Any]]] = {}
 
+def sanitize_user_input(text: str) -> str:
+    """Masks potential PII (Credit Cards and Phone Numbers) before sending to LLM."""
+    # Mask 16 digit card numbers (with or without spaces/dashes)
+    cc_pattern = r'\b(?:\d[ -]*?){13,16}\b'
+    text = re.sub(cc_pattern, "[MASKED_CARD_NUMBER]", text)
+
+    # Mask Indian phone numbers (10 digits, optional +91)
+    phone_pattern = r'\b(?:\+?91[\-\s]?)?[6789]\d{9}\b'
+    text = re.sub(phone_pattern, "[MASKED_PHONE_NUMBER]", text)
+
+    return text
+
 def execute_tool(name: str, args: Dict[str, Any]) -> str:
     if name == "get_order_details":
         return get_order_details(args.get("order_id", ""))
@@ -112,21 +134,25 @@ def execute_tool(name: str, args: Dict[str, Any]) -> str:
     elif name == "search_policy":
         return load_policy_document()
     elif name == "escalate_to_human":
+        SYSTEM_METRICS["escalations_count"] += 1
         return escalate_to_human(
-            args.get("order_id", ""), 
-            args.get("reason", ""), 
+            args.get("order_id", ""),
+            args.get("reason", ""),
             args.get("conversation_summary", "")
         )
     return json.dumps({"error": "Unknown tool"})
 
 def run_agent_chat(session_id: str, user_message: str) -> str:
+    # Mask any PII before we put it into the prompt context
+    safe_message = sanitize_user_input(user_message)
+
     if session_id not in SESSION_STORE:
         SESSION_STORE[session_id] = [{"role": "system", "content": SYSTEM_PROMPT}]
 
     messages = SESSION_STORE[session_id]
-    messages.append({"role": "user", "content": user_message})
+    messages.append({"role": "user", "content": safe_message})
 
-    MAX_ITERATIONS = 5 
+    MAX_ITERATIONS = 5
     iterations = 0
 
     while iterations < MAX_ITERATIONS:
@@ -137,6 +163,13 @@ def run_agent_chat(session_id: str, user_message: str) -> str:
             tool_choice="auto",
             temperature=0.0
         )
+
+        # Track usage metrics
+        if hasattr(response, 'usage') and response.usage:
+            SYSTEM_METRICS["total_prompt_tokens"] += response.usage.prompt_tokens
+            SYSTEM_METRICS["total_completion_tokens"] += response.usage.completion_tokens
+            SYSTEM_METRICS["total_tokens"] += response.usage.total_tokens
+            SYSTEM_METRICS["total_requests"] += 1
 
         response_msg = response.choices[0].message
 
