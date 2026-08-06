@@ -22,7 +22,36 @@ Rather than wrapping a thin prompt around an LLM, this solution utilizes a hybri
 
 ## 💻 Quick Start (Local Setup)
 
-1. **Clone the repository:**
+1. **Clone the repository**
    ```bash
-   git clone <https://github.com/MohammedThaher01/yellow-ai-trendy-agent>
-   cd trendly-support-agent
+   git clone https://github.com/MohammedThaher01/yellow-ai-trendy-agent
+   cd yellow-ai-trendy-agent
+   ```
+
+2. **Set up the virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure environment variables**
+
+   Create a `.env` file in the project root and add your Groq API key:
+   ```
+   GROQ_API_KEY=your_groq_api_key_here
+   ```
+
+5. **Run the server**
+   ```bash
+   uvicorn agent.main:app --reload --port 8000
+   ```
+
+   The server starts at `http://localhost:8000`.
+   - UI: `http://localhost:8000/ui`
+   - Swagger docs: `http://localhost:8000/docs`
