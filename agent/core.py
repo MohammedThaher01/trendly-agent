@@ -156,16 +156,22 @@ def run_agent_chat(session_id: str, user_message: str) -> str:
     iterations = 0
 
     while iterations < MAX_ITERATIONS:
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=messages,
-            tools=TOOLS_SCHEMA,
-            tool_choice="auto",
-            temperature=0.0
-        )
+        try:
+            response = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=messages,
+                tools=TOOLS_SCHEMA,
+                tool_choice="auto",
+                temperature=0.0
+            )
+        except Exception as e:
+            # Catch Groq Rate Limits / Burst crashes gracefully
+            print(f"\n[LLM API ERROR] {str(e)}\n")
+            return "I am experiencing high network traffic right now. Please wait a few seconds and try again."
 
         # Track usage metrics
         if hasattr(response, 'usage') and response.usage:
+        # Track usage metrics
             SYSTEM_METRICS["total_prompt_tokens"] += response.usage.prompt_tokens
             SYSTEM_METRICS["total_completion_tokens"] += response.usage.completion_tokens
             SYSTEM_METRICS["total_tokens"] += response.usage.total_tokens
