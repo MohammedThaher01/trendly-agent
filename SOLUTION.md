@@ -1,22 +1,22 @@
 # Solution Note: Trendly Agentic Support Assistant
 
 ## Architecture & Approach
-The solution uses a hybrid architecture. Instead of relying purely on a Retrieval-Augmented Generation (RAG) approach where an LLM parses the policy and attempts date arithmetic (which is highly prone to hallucinations), this system splits the workload:
+The solution utilizes a hybrid ReAct architecture to eliminate LLM hallucinations on business policies and date math:
 
-1. **Conversational Orchestrator:** The LLM handles natural language understanding, empathetic engagement, and multi-turn state tracking.
-2. **Deterministic Rules Engine:** The actual business logic—calculating 30-day windows, checking if an item is a non-returnable category (like jewellery or innerwear), and handling final-sale edge cases—is executed strictly in Python via function calling.
-3. **Guardrail Interceptor:** A final validation layer runs a regex check on the LLM's output to guarantee compliance with Section 7 (preventing the collection of bank details or the offering of unauthorized discounts).
+1. **Conversational Orchestrator:** The LLM acts purely as a cognitive router, managing natural language understanding, empathetic engagement, and multi-turn state tracking.
+2. **Deterministic Rules Engine:** The core business logic—calculating strict 30-day return windows, checking non-returnable categories (e.g., jewellery), and handling final-sale edge cases—is executed entirely in Python via function calling.
+3. **Guardrail Interceptor:** Regex-based validation runs on both input (masking PII like credit cards/phone numbers) and output (guaranteeing compliance with Section 7 to prevent unauthorized discounts or bank detail collection).
 
-## Key Trade-offs
-* **Tool Calling vs. Keyword Matching:** Using real tool calling increases latency slightly compared to basic keyword matching, but it enables genuine dynamic reasoning and multi-step execution. 
-* **Stateless API vs. Persistent DB:** For this assignment, conversation state is held in memory. In a production setting, this would be swapped for Redis or Postgres to allow horizontal scaling of the FastAPI workers.
+## Path to Production (Addressing Prototype Trade-offs)
+To scale this Proof-of-Concept to handle Trendly's volume of 2,000+ daily chats, the following architectural bottlenecks must be resolved:
 
-## Known Limitations
-* The current setup relies on a fixed "current evaluation date" (August 4, 2026) to make date math deterministic against the static `orders.json` file. 
-* Token limits are not explicitly managed; exceptionally long multi-turn conversations could theoretically overflow the context window, requiring a summarization pipeline in the future.
+1. **Synchronous Execution Bottleneck:** The current FastAPI and Groq client implementations are synchronous. Under high concurrency, this blocks the main thread. Production requires `AsyncGroq` and `async def` routing to prevent request queuing and timeouts.
+2. **In-Memory State (Memory Leaks):** Conversation state (`SESSION_STORE`) is currently held in a global Python dictionary. In production, this eventually causes memory leaks and breaks API statelessness. This must be migrated to a Redis cluster to allow horizontal scaling of worker nodes.
+3. **Unbounded Context Windows:** The orchestrator currently appends messages indefinitely. Long-lived multi-turn sessions will eventually trigger `400 Token Limit Exceeded` errors. A rolling sliding-window summarizer is required.
+4. **Strict LLM Exception Handling:** The current tool parser falls back to empty dictionaries on `json.JSONDecodeError`. A production system needs to feed validation errors back into the LLM context so the agent can self-correct malformed tool calls dynamically.
 
 ## 5 Discovery Questions for Trendly Ops
-Before deploying this into production for 2,000 chats/day, I would ask the ops team:
+Before deploying this into production, I need the following clarified by the ops team:
 
 1. **Inventory Synchronization:** How frequently are inventory levels updated in the backend? Is stock reserved immediately when an exchange is approved in chat, or only after the return parcel passes warehouse inspection?
 2. **Reverse Logistics:** What is the exact fallback protocol when a customer’s pincode is non-serviceable for reverse pickup? Can the agent issue self-ship instructions automatically, or should those be routed to human agents?

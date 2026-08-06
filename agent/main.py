@@ -1,20 +1,29 @@
 import os
 import sys
-from fastapi.responses import HTMLResponse
 import uuid
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
 
 if __package__ is None:
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-# We import SYSTEM_METRICS directly from agent.core so it tracks accurately
-from agent.core import run_agent_chat, SESSION_STORE, SYSTEM_METRICS 
+from agent.core import run_agent_chat, SESSION_STORE, SYSTEM_METRICS
 
 app = FastAPI(
     title="Trendly FDE Agentic Support API",
     description="Forward Deployed Engineer Intern Screening Assignment - Yellow.ai",
     version="1.0.0"
+)
+
+# Enable CORS for browser and multi-origin evaluations
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 class ChatRequest(BaseModel):
@@ -31,7 +40,7 @@ def health_check():
 
 @app.get("/metrics")
 def get_metrics():
-    """Returns real-time agent observability metrics."""
+    """Observability endpoint returning real-time agent metrics."""
     return {
         "status": "healthy",
         "system": "Trendly Support Agent",
@@ -55,7 +64,6 @@ def reset_session(session_id: str):
 
 @app.get("/ui", response_class=HTMLResponse)
 async def get_chat_ui():
-    # Generates a random session ID when the page loads
     session_id = f"web-{uuid.uuid4().hex[:6]}"
     
     html_content = f"""
@@ -108,7 +116,7 @@ async def get_chat_ui():
                 
                 appendMessage(text, 'user');
                 inputField.value = '';
-                appendMessage('...', 'bot'); // typing indicator
+                appendMessage('...', 'bot');
                 const typingIndicator = messagesDiv.lastChild;
 
                 try {{
@@ -133,4 +141,4 @@ async def get_chat_ui():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("agent.main:app", host="0.0.0.0", port=8000, reload=True)
