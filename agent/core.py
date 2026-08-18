@@ -158,7 +158,7 @@ def run_agent_chat(session_id: str, user_message: str) -> str:
     while iterations < MAX_ITERATIONS:
         try:
             response = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 messages=messages,
                 tools=TOOLS_SCHEMA,
                 tool_choice="auto",
