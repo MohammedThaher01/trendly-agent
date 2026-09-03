@@ -12,8 +12,8 @@ if __package__ is None:
 from agent.core import run_agent_chat, SESSION_STORE, SYSTEM_METRICS
 
 app = FastAPI(
-    title="Trendly FDE Agentic Support API",
-    description="Forward Deployed Engineer Intern Screening Assignment - Yellow.ai",
+    title="TechGear Support API",
+    description="Hybrid ReAct Autonomous Support Agent",
     version="1.0.0"
 )
 
@@ -36,14 +36,14 @@ class ChatResponse(BaseModel):
 
 @app.get("/")
 def health_check():
-    return {"status": "online", "system": "Trendly Support Agent", "eval_date": "2026-08-04"}
+    return {"status": "online", "system": "TechGear Support API", "version": "1.0.0"}
 
 @app.get("/metrics")
 def get_metrics():
     """Observability endpoint returning real-time agent metrics."""
     return {
         "status": "healthy",
-        "system": "Trendly Support Agent",
+        "system": "TechGear Support API",
         "metrics": SYSTEM_METRICS
     }
 
@@ -70,7 +70,7 @@ async def get_chat_ui():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Trendly AI Assistant</title>
+        <title>TechGear AI Assistant</title>
         <style>
             body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; display: flex; justify-content: center; padding: 20px; }}
             #chat-container {{ width: 100%; max-width: 500px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 80vh; }}
@@ -87,9 +87,9 @@ async def get_chat_ui():
     </head>
     <body>
         <div id="chat-container">
-            <div id="header">Trendly Support</div>
+            <div id="header">TechGear Support</div>
             <div id="messages">
-                <div class="message bot">Hi there! I'm the Trendly Support Assistant. How can I help you with your order?</div>
+                <div class="message bot">Hi there! I'm the TechGear Support Assistant. How can I help you with your order?</div>
             </div>
             <div id="input-area">
                 <input type="text" id="userInput" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMessage()">
