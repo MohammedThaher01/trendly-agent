@@ -1,7 +1,5 @@
-> **Note for Evaluators:** I am currently based in Chennai, but I have completed all my graduation requirements and am fully prepared to relocate to Whitefield immediately for the 6-month onsite requirement.
-
 # Trendly Agentic Support API 
-**Yellow.ai Forward Deployed Engineer Intern Assignment**
+
 
 An enterprise-grade support agent built for Trendly. Designed to handle 2,000+ daily chats, this system processes complex return/exchange logic deterministically, grounds policy answers strictly in documentation, and escalates edge cases cleanly to a human CRM.
 
