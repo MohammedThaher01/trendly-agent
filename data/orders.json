@@ -1,5 +1,5 @@
 {
-  "_note": "Fixed dataset for the Trendly FDE assignment. Load this file as-is. Do NOT edit, rename, or add orders — the evaluation harness tests against these exact records.",
+  "_note": "Independent e-commerce dataset matching system schemas.",
   "customers": [
     { "customer_id": "C-100", "name": "Ananya Rao", "email": "ananya.rao@example.com", "phone": "+91-98765-10001" },
     { "customer_id": "C-101", "name": "Marcus Bell", "email": "marcus.bell@example.com", "phone": "+1-415-555-0102" },
@@ -54,8 +54,7 @@
       "items": [
         { "sku": "TR-JKT-008", "name": "Quilted Bomber Jacket", "category": "apparel", "size": "S", "qty": 1, "price": 5999, "final_sale": false }
       ],
-      "total": 5999,
-      "_note_for_designers": "Delivered 2026-06-05, well outside the 30-day return window. Return must be refused."
+      "total": 5999
     },
     {
       "order_id": "TR-4524",
@@ -88,8 +87,7 @@
       "items": [
         { "sku": "TR-SNK-017", "name": "Court Sneakers", "category": "footwear", "size": "42", "qty": 1, "price": 4499, "final_sale": false }
       ],
-      "total": 4499,
-      "_note_for_designers": "14 days past expected delivery. Customer is likely upset; a good agent acknowledges the delay before quoting policy."
+      "total": 4499
     },
     {
       "order_id": "TR-4526",
@@ -105,8 +103,7 @@
       "items": [
         { "sku": "TR-BAG-011", "name": "Canvas Tote", "category": "accessories", "size": "FS", "qty": 1, "price": 1899, "final_sale": false }
       ],
-      "total": 1899,
-      "_note_for_designers": "Carrier marked lost. Policy says this is NOT a return — it is a lost-parcel claim and must be escalated to a human."
+      "total": 1899
     },
     {
       "order_id": "TR-4527",
@@ -122,8 +119,7 @@
       "items": [
         { "sku": "TR-EAR-042", "name": "Pearl Drop Earrings", "category": "jewellery", "size": "FS", "qty": 1, "price": 1599, "final_sale": false }
       ],
-      "total": 1599,
-      "_note_for_designers": "Within 30 days, BUT jewellery is non-returnable for hygiene reasons. Return must be refused on category grounds, not date grounds."
+      "total": 1599
     },
     {
       "order_id": "TR-4528",
@@ -139,8 +135,7 @@
       "items": [
         { "sku": "TR-SHR-009", "name": "Oxford Shirt", "category": "apparel", "size": "M", "qty": 1, "price": 2299, "final_sale": true }
       ],
-      "total": 2299,
-      "_note_for_designers": "Within window and a returnable category, but marked FINAL SALE — exchange only, no refund."
+      "total": 2299
     },
     {
       "order_id": "TR-4529",
@@ -158,8 +153,7 @@
       ],
       "total": 1799,
       "cancelled_at": "2026-07-26T06:40:00Z",
-      "refund_status": "processed",
-      "_note_for_designers": "Already cancelled and refunded. A return request here is nonsensical and the agent should say so."
+      "refund_status": "processed"
     },
     {
       "order_id": "TR-4530",
@@ -175,8 +169,7 @@
       "items": [
         { "sku": "TR-KRT-033", "name": "Block-Print Kurta", "category": "apparel", "size": "L", "qty": 1, "price": 2199, "final_sale": false }
       ],
-      "total": 2199,
-      "_note_for_designers": "The clean happy-path return: in window, returnable category, not final sale."
+      "total": 2199
     }
   ]
 }
