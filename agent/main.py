@@ -1,6 +1,3 @@
-Here is the updated FastAPI code. I converted the React/JSX properties (`className`, `fillRule`, `clipRule`) from your footer into standard HTML attributes (`class`, `fill-rule`, `clip-rule`) so they work inside the plain HTML string. I also included the Tailwind CSS CDN in the `<head>` so the utility classes in your footer render correctly, and slightly adjusted the `body` CSS to stack the chat container and footer nicely.
-
-```python
 import os
 import sys
 import uuid
@@ -122,6 +119,12 @@ async def get_chat_ui():
                 </svg>
               </a>
             </div>
+            <!-- Dataset Link -->
+            <div class="mt-2 text-sm">
+                <a href="https://github.com/MohammedThaher01/trendly-agent/tree/main/data" target="_blank" rel="noreferrer" class="text-blue-500 hover:text-blue-600 hover:underline transition-colors font-medium">
+                    dataset
+                </a>
+            </div>
         </footer>
 
         <script>
@@ -169,5 +172,3 @@ async def get_chat_ui():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("agent.main:app", host="0.0.0.0", port=8000, reload=True)
-
-```
