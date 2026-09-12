@@ -122,7 +122,7 @@ async def get_chat_ui():
             <!-- Dataset Link -->
             <div class="mt-2 text-sm">
                 <a href="https://github.com/MohammedThaher01/trendly-agent/tree/main/data" target="_blank" rel="noreferrer" class="text-blue-500 hover:text-blue-600 hover:underline transition-colors font-medium">
-                    dataset
+                    Here's the Dataset!
                 </a>
             </div>
         </footer>
