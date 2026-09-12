@@ -73,31 +73,47 @@ async def get_chat_ui():
         <title>TechGear AI Assistant</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
-            body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }}
-            #chat-container {{ width: 100%; max-width: 500px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 75vh; margin-bottom: 2rem; }}
-            #header {{ background: #111827; color: white; padding: 16px; border-radius: 12px 12px 0 0; text-align: center; font-weight: bold; }}
-            #messages {{ flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }}
-            .message {{ max-width: 80%; padding: 10px 14px; border-radius: 18px; line-height: 1.4; font-size: 15px; }}
-            .bot {{ background: #f3f4f6; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 4px; }}
-            .user {{ background: #2563eb; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }}
-            #input-area {{ display: flex; padding: 16px; border-top: 1px solid #e5e7eb; }}
-            input {{ flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; outline: none; font-size: 15px; }}
-            button {{ margin-left: 10px; padding: 10px 16px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }}
-            button:hover {{ background: #1d4ed8; }}
+            /* Custom scrollbar for a cleaner look */
+            ::-webkit-scrollbar {{ width: 6px; }}
+            ::-webkit-scrollbar-track {{ background: transparent; }}
+            ::-webkit-scrollbar-thumb {{ background: #cbd5e1; border-radius: 10px; }}
+            ::-webkit-scrollbar-thumb:hover {{ background: #94a3b8; }}
         </style>
     </head>
-    <body>
-        <div id="chat-container">
-            <div id="header">TechGear Support</div>
-            <div id="messages">
-                <div class="message bot">Hi there! I'm the TechGear Support Assistant. How can I help you with your order?</div>
+    <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen m-0 p-5 font-sans box-border">
+        
+        <!-- Chat Interface -->
+        <div class="w-full max-w-lg bg-white rounded-xl shadow-lg flex flex-col h-[75vh] mb-8 overflow-hidden border border-gray-200">
+            <!-- Header -->
+            <div class="bg-gray-900 text-white p-4 text-center font-bold tracking-wide">
+                TechGear Support
             </div>
-            <div id="input-area">
-                <input type="text" id="userInput" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMessage()">
-                <button onclick="sendMessage()">Send</button>
+            
+            <!-- Messages Area -->
+            <div id="messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+                <div class="max-w-[80%] p-3 rounded-2xl text-[15px] leading-relaxed bg-gray-100 text-gray-800 self-start rounded-bl-sm">
+                    Hi there! I'm the TechGear Support Assistant. How can I help you with your order?
+                </div>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="flex p-4 border-t border-gray-200 bg-gray-50">
+                <input 
+                    type="text" 
+                    id="userInput" 
+                    placeholder="Type your message..." 
+                    class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[15px] transition-shadow"
+                    onkeypress="if(event.key === 'Enter') sendMessage()"
+                >
+                <button 
+                    onclick="sendMessage()" 
+                    class="ml-3 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Send
+                </button>
             </div>
         </div>
 
+        <!-- Footer Segment -->
         <footer class="max-w-4xl mx-auto px-6 flex flex-col items-center gap-4">
             <div class="text-sm text-slate-400 font-medium tracking-wide">
               Developed by Mohammed Thaher S
@@ -122,7 +138,7 @@ async def get_chat_ui():
             <!-- Dataset Link -->
             <div class="mt-2 text-sm">
                 <a href="https://github.com/MohammedThaher01/trendly-agent/tree/main/data" target="_blank" rel="noreferrer" class="text-blue-500 hover:text-blue-600 hover:underline transition-colors font-medium">
-                    Here's the Dataset!
+                    dataset
                 </a>
             </div>
         </footer>
@@ -134,7 +150,13 @@ async def get_chat_ui():
 
             function appendMessage(text, sender) {{
                 const msgDiv = document.createElement('div');
-                msgDiv.className = `message ${{sender}}`;
+                // Use Tailwind classes dynamically for user vs bot messages
+                if (sender === 'user') {{
+                    msgDiv.className = 'max-w-[80%] p-3 rounded-2xl text-[15px] leading-relaxed bg-blue-600 text-white self-end rounded-br-sm shadow-sm';
+                }} else {{
+                    msgDiv.className = 'max-w-[80%] p-3 rounded-2xl text-[15px] leading-relaxed bg-gray-100 text-gray-800 self-start rounded-bl-sm shadow-sm';
+                }}
+                
                 msgDiv.innerText = text;
                 messagesDiv.appendChild(msgDiv);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
