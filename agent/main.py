@@ -70,7 +70,7 @@ async def get_chat_ui():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Trendly AI Assistant</title>
+        <title>Trendly - Support Agent</title>
         <style>
             body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; display: flex; justify-content: center; padding: 20px; }}
             #chat-container {{ width: 100%; max-width: 500px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 80vh; }}
@@ -87,7 +87,7 @@ async def get_chat_ui():
     </head>
     <body>
         <div id="chat-container">
-            <div id="header">Trendly Support</div>
+            <div id="header">Trendly - Support Agent</div>
             <div id="messages">
                 <div class="message bot">Hi there! I'm the Trendly Support Assistant. How can I help you with your order?</div>
             </div>
