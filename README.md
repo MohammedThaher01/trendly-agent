@@ -1,7 +1,7 @@
 > **Note for Evaluators:** I am currently based in Chennai, but I have completed all my graduation requirements and am fully prepared to relocate to Whitefield immediately for the 6-month onsite requirement.
 
 # Trendly Agentic Support API 
-**Yellow.ai Forward Deployed Engineer Intern Assignment**
+**Forward Deployed Engineer Intern Assignment**
 
 An enterprise-grade support agent built for Trendly. Designed to handle 2,000+ daily chats, this system processes complex return/exchange logic deterministically, grounds policy answers strictly in documentation, and escalates edge cases cleanly to a human CRM.
 
@@ -9,9 +9,9 @@ An enterprise-grade support agent built for Trendly. Designed to handle 2,000+ d
 
 The application is deployed live on Render and will remain active for the evaluation period.
 
-*   **Live Chat UI:** [https://yellow-ai-trendy-agent.onrender.com/ui](https://yellow-ai-trendy-agent.onrender.com/ui) *(Vanilla HTML/JS interface)*
-*   **API Documentation (Swagger):** [https://yellow-ai-trendy-agent.onrender.com/docs](https://yellow-ai-trendy-agent.onrender.com/docs)
-*   **Real-time Observability:** [https://yellow-ai-trendy-agent.onrender.com/metrics](https://yellow-ai-trendy-agent.onrender.com/metrics)
+*   **Live Chat UI:** [https://trendly-agent-1.onrender.com/ui](https://trendly-agent-1.onrender.com/ui) *(Vanilla HTML/JS interface)*
+*   **API Documentation (Swagger):** [https://trendly-agent-1.onrender.com/docs](https://trendly-agent-1.onrender.com/docs)
+*   **Real-time Observability:** [https://trendly-agent-1.onrender.com/metrics](https://trendly-agent-1.onrender.com/metrics)
 
 ## 🧠 Architectural Highlights (The FDE Approach)
 
@@ -26,8 +26,8 @@ Rather than wrapping a thin prompt around an LLM, this solution utilizes a hybri
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/MohammedThaher01/yellow-ai-trendy-agent
-   cd yellow-ai-trendy-agent
+   git clone https://github.com/MohammedThaher01/trendly-agent-1
+   cd trendly-agent-1
    ```
 
 2. **Set up the virtual environment**

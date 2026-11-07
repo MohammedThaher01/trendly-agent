@@ -13,7 +13,7 @@ from agent.core import run_agent_chat, SESSION_STORE, SYSTEM_METRICS
 
 app = FastAPI(
     title="Trendly FDE Agentic Support API",
-    description="Forward Deployed Engineer Intern Screening Assignment - Yellow.ai",
+    description="Forward Deployed Engineer Intern Screening Assignment",
     version="1.0.0"
 )
 
