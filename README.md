@@ -1,5 +1,3 @@
-> **Note for Evaluators:** I am currently based in Chennai, but I have completed all my graduation requirements and am fully prepared to relocate to Whitefield immediately for the 6-month onsite requirement.
-
 # Trendly Agentic Support API 
 **Forward Deployed Engineer Intern Assignment**
 
