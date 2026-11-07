@@ -26,8 +26,8 @@ Rather than wrapping a thin prompt around an LLM, this solution utilizes a hybri
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/MohammedThaher01/trendly-agent-1
-   cd trendly-agent-1
+   git clone https://github.com/MohammedThaher01/trendly-agent
+   cd trendly-agent
    ```
 
 2. **Set up the virtual environment**
