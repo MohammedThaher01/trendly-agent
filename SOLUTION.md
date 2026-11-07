@@ -15,7 +15,7 @@
        ▼
 ┌──────────────────────┐  3. Tool Call   ┌───────────────────────────┐
 │   LLM Orchestrator   ├────────────────►│  Deterministic Tools      │
-│  (Groq / Llama-3.1)  │                 │  (Python Rules Engine)    │
+│  (Groq / gpt-oss-20b)│                 │  (Python Rules Engine)    │
 │  - NLU & Routing     │◄────────────────┤   ├─ get_order()          │
 │  - Session State     │  4. Tool Result │   ├─ check_eligibility()  │
 └──────┬───────────────┘                 │   └─ escalate_to_human()  │
@@ -34,7 +34,7 @@
 ## Architecture & Approach
 The solution utilizes a hybrid ReAct architecture to eliminate LLM hallucinations on business policies and date math:
 
-1. **Conversational Orchestrator:** The LLM acts purely as a cognitive router, managing natural language understanding, empathetic engagement, and multi-turn state tracking.
+1. **Conversational Orchestrator:** The LLM (Groq / `openai/gpt-oss-20b`) acts purely as a cognitive router, managing natural language understanding, empathetic engagement, and multi-turn state tracking.
 2. **Deterministic Rules Engine:** The core business logic—calculating strict 30-day return windows, checking non-returnable categories (e.g., jewellery), and handling final-sale edge cases—is executed entirely in Python via function calling.
 3. **Guardrail Interceptor:** Regex-based validation runs on both input (masking PII like credit cards and phone numbers) and output (guaranteeing compliance with Section 7 to prevent unauthorized discounts or bank detail collection).
 
