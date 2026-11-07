@@ -1,4 +1,4 @@
-# Trendly — Shipping & Returns Policy
+# Trendly : Shipping & Returns Policy
 
 *Effective 1 January 2026. This is the only source of truth for policy questions. If something is not covered here, the assistant must say so and offer a human agent.*
 
