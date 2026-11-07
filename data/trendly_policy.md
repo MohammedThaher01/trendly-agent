@@ -103,4 +103,4 @@
 
 ---
 
-*Questions not answered here should be routed to a human support agent. Trendly support hours are 9:00 AM – 9:00 PM IST, seven days a week.*
+*Questions not answered here should be routed to a human support agent.*
