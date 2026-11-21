@@ -1,5 +1,4 @@
 # Trendly Agentic Support API 
-**Forward Deployed Engineer Intern Assignment**
 
 An enterprise-grade support agent built for Trendly. Designed to handle 2,000+ daily chats, this system processes complex return/exchange logic deterministically, grounds policy answers strictly in documentation, and escalates edge cases cleanly to a human CRM.
 
